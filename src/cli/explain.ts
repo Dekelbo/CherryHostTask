@@ -17,6 +17,7 @@ export interface ExplainInput {
   joint?: { outcome: JointOutcome; constraints: JointConstraints };
   stats: LlmCallStats;
   model: string;
+  tokenBudget: number;
 }
 
 function section(title: string, lines: string[]): string {
@@ -74,11 +75,13 @@ export function renderExplain(input: ExplainInput): string {
     );
   }
 
+  const used = stats.inputTokens + stats.outputTokens;
   parts.push(
     section("Model usage", [
       `Provider model: ${input.model}`,
       `Calls: ${stats.calls}`,
       `Tokens in/out: ${stats.inputTokens}/${stats.outputTokens}`,
+      `Budget: ${used.toLocaleString("en-US")} of ${input.tokenBudget.toLocaleString("en-US")} tokens used`,
     ]),
   );
 

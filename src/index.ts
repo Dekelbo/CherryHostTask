@@ -111,6 +111,7 @@ async function answerQuestion(
         analyses,
         ...(joint ? { joint } : {}),
         stats: app.llm.getStats(),
+        tokenBudget: app.tokenBudget,
         model: process.env["LLM_PROVIDER"] === "anthropic" ? "anthropic" : "mock",
       }),
     );

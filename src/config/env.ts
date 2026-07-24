@@ -15,6 +15,8 @@ const EnvSchema = z
     ANTHROPIC_ANALYSIS_MODEL: z.string().min(1).default("claude-sonnet-5"),
     LLM_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(30_000),
     LLM_MAX_RETRIES: z.coerce.number().int().nonnegative().default(3),
+    /** Cumulative cap for one run. Enforced, not merely reported. */
+    LLM_TOKEN_BUDGET: z.coerce.number().int().positive().default(200_000),
     UNBACKED_NUMBER_MODE: z.enum(["reject", "warn"]).default("reject"),
   })
   .superRefine((value, ctx) => {

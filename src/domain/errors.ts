@@ -64,6 +64,12 @@ export class VerificationRejectedError extends AppError {
   readonly exitCode = ExitCode.VerificationRejected;
 }
 
+/** The project's cumulative token budget was reached. Stops spend, does not just report it. */
+export class TokenBudgetExceededError extends AppError {
+  readonly code = "TOKEN_BUDGET_EXCEEDED";
+  readonly exitCode = ExitCode.ConfigOrProvider;
+}
+
 export class OrchestrationError extends AppError {
   readonly code = "ORCHESTRATION_FAILED";
   readonly exitCode = ExitCode.ConfigOrProvider;

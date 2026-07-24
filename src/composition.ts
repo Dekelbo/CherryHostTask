@@ -7,6 +7,7 @@ import { createHrAgent } from "./hr/hr.agent";
 import hrJson from "./hr/hr.data.json";
 import type { HrData } from "./hr/hr.types";
 import { createAnthropicClient } from "./llm/anthropic-client";
+import { createBudgetedClient } from "./llm/budget";
 import type { LlmClient } from "./llm/client";
 import { createMockLlmClient } from "./llm/mock-client";
 
@@ -23,14 +24,19 @@ export interface Application {
   financeAgent: DepartmentAgent;
   hrAgent: DepartmentAgent;
   llm: LlmClient;
+  tokenBudget: number;
 }
 
 export function createApplication(env: Env): Application {
-  const llm: LlmClient =
+  const provider: LlmClient =
     env.LLM_PROVIDER === "anthropic" ? createAnthropicClient(env) : createMockLlmClient();
+
+  // Every provider call passes the budget gate, whichever provider is in use.
+  const llm = createBudgetedClient(provider, env.LLM_TOKEN_BUDGET);
 
   return {
     llm,
+    tokenBudget: env.LLM_TOKEN_BUDGET,
     financeAgent: createFinanceAgent({
       llm,
       data: financeJson as FinanceData,
