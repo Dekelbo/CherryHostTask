@@ -1,0 +1,30 @@
+{
+  "reportingPeriod": "2026-Q2",
+  "currency": "EUR",
+  "monthlyRevenue": 412000,
+  "monthlyOperatingCosts": 356000,
+  "operatingCostBreakdown": {
+    "payroll": 198000,
+    "propertyMaintenance": 61000,
+    "marketing": 34000,
+    "softwareAndTools": 18000,
+    "other": 45000
+  },
+  "cashOnHand": 2848000,
+  "approvedAnnualHiringBudget": 96000,
+  "committedAnnualHiringBudget": 44000,
+  "benchmarkAnnualLoadedCostPerHire": 48000,
+  "projectedAnnualGrowthPercent": 12,
+  "outstandingReceivables": 74000,
+  "runwayDefinition": "cashOnHand / monthlyOperatingCosts (zero-revenue stress case)",
+  "assumptions": [
+    "benchmarkAnnualLoadedCostPerHire is a market benchmark, not an agreed offer figure; actual loaded cost varies by role and seniority.",
+    "Runway is deliberately the zero-revenue stress case, not a going-concern projection.",
+    "Operating costs are assumed flat month over month for this reporting period."
+  ],
+  "knownGaps": [
+    "No per-department cost allocation is available; operating costs are only broken down by category.",
+    "No individual compensation records are held in this dataset; salary data is owned by HR systems outside Finance's authorised scope.",
+    "No committed new-revenue pipeline is modelled, so growth is a projection rather than contracted revenue."
+  ]
+}

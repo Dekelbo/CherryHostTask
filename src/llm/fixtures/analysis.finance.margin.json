@@ -1,0 +1,51 @@
+{
+  "id": "analysis.finance.margin",
+  "purpose": "analysis",
+  "agent": "finance",
+  "fallback": false,
+  "match": ["margin", "profit", "revenue", "cost", "costs", "runway"],
+  "response": {
+    "agent": "finance",
+    "summary": "Operating margin is 13.59%. Monthly revenue is €412,000 against operating costs of €356,000, leaving a monthly operating profit of €56,000.",
+    "facts": [
+      {
+        "claim": "Monthly revenue is €412,000.",
+        "label": "Monthly revenue",
+        "value": 412000,
+        "sourceField": "monthlyRevenue",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Monthly operating costs are €356,000.",
+        "label": "Monthly operating costs",
+        "value": 356000,
+        "sourceField": "monthlyOperatingCosts",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Monthly operating profit is €56,000.",
+        "label": "Monthly operating profit",
+        "value": 56000,
+        "sourceField": "monthlyOperatingProfit",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Operating margin is 13.59%.",
+        "label": "Operating margin",
+        "value": 13.59,
+        "sourceField": "operatingMarginPercent",
+        "reportingPeriod": "2026-Q2"
+      }
+    ],
+    "concerns": [
+      "Cash runway is 8 months under the zero-revenue stress case, so margin has limited room to absorb new fixed costs.",
+      "Outstanding receivables of €74,000 are not yet collected cash."
+    ],
+    "recommendation": "Hold operating costs flat while revenue grows. A monthly operating profit of €56,000 is workable, but it is thin enough that any new recurring cost should be evaluated against the €52,000 available hiring budget rather than against revenue.",
+    "missingInformation": [
+      "No per-department cost allocation is available, so margin cannot be attributed to a specific team.",
+      "No committed new-revenue pipeline is modelled, so growth remains a projection."
+    ],
+    "confidence": 0.9
+  }
+}

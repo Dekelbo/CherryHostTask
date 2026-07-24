@@ -1,0 +1,66 @@
+{
+  "id": "analysis.finance.hiring",
+  "purpose": "analysis",
+  "agent": "finance",
+  "fallback": true,
+  "match": ["hire", "hiring", "afford", "budget", "people", "headcount", "expand", "team"],
+  "response": {
+    "agent": "finance",
+    "summary": "The available annual hiring budget is €52,000: €96,000 approved less €44,000 already committed. At the benchmark loaded cost of €48,000 per hire, that funds 1 additional hire and no more.",
+    "facts": [
+      {
+        "claim": "The approved annual hiring budget is €96,000.",
+        "label": "Approved annual hiring budget",
+        "value": 96000,
+        "sourceField": "approvedAnnualHiringBudget",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "€44,000 of the hiring budget is already committed.",
+        "label": "Already committed hiring budget",
+        "value": 44000,
+        "sourceField": "committedAnnualHiringBudget",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The available annual hiring budget is €52,000.",
+        "label": "Available annual hiring budget",
+        "value": 52000,
+        "sourceField": "availableAnnualHiringBudget",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The benchmark annual loaded cost per hire is €48,000.",
+        "label": "Benchmark annual loaded cost per hire",
+        "value": 48000,
+        "sourceField": "benchmarkAnnualLoadedCostPerHire",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "At most 1 additional hire is affordable.",
+        "label": "Maximum affordable additional hires",
+        "value": 1,
+        "sourceField": "maxAffordableAdditionalHires",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Cash runway is 8 months.",
+        "label": "Cash runway",
+        "value": 8,
+        "sourceField": "cashRunwayMonths",
+        "reportingPeriod": "2026-Q2"
+      }
+    ],
+    "concerns": [
+      "A second hire would exceed the available hiring budget of €52,000 unless the approved figure is raised.",
+      "Cash runway of 8 months is measured against a zero-revenue stress case, so it is a floor rather than a forecast."
+    ],
+    "recommendation": "Fund at most 1 additional role this period, and cap its loaded annual cost at the €48,000 benchmark. Any second hire needs either a budget increase or evidence of committed new revenue.",
+    "missingInformation": [
+      "The €48,000 loaded cost per hire is a market benchmark and an assumption, not an agreed offer figure.",
+      "No per-department cost allocation exists, so the cost impact on a specific team cannot be isolated.",
+      "Finance holds no staffing or capacity data, so it cannot say which team should receive a hire."
+    ],
+    "confidence": 0.88
+  }
+}

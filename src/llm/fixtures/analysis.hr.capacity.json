@@ -1,0 +1,65 @@
+{
+  "id": "analysis.hr.capacity",
+  "purpose": "analysis",
+  "agent": "hr",
+  "fallback": false,
+  "match": ["capacity", "over capacity", "workload", "overtime", "turnover", "team", "teams"],
+  "response": {
+    "agent": "hr",
+    "summary": "Two departments are over capacity. Operations has 12 people and carried 180 overtime hours last month; maintenance has 6 people and carried 96 overtime hours.",
+    "facts": [
+      {
+        "claim": "Operations is over capacity.",
+        "label": "operations capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.operations.capacityStatus",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Operations has 12 employees.",
+        "label": "operations headcount",
+        "value": 12,
+        "sourceField": "departments.operations.headcount",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Operations carried 180 overtime hours last month.",
+        "label": "operations overtime hours last month",
+        "value": 180,
+        "sourceField": "overtimeByDepartment.operations",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Maintenance is over capacity.",
+        "label": "maintenance capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.maintenance.capacityStatus",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Maintenance has 6 employees.",
+        "label": "maintenance headcount",
+        "value": 6,
+        "sourceField": "departments.maintenance.headcount",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Maintenance carried 96 overtime hours last month.",
+        "label": "maintenance overtime hours last month",
+        "value": 96,
+        "sourceField": "overtimeByDepartment.maintenance",
+        "reportingPeriod": "2026-Q2"
+      }
+    ],
+    "concerns": [
+      "Across 34 employees the average is 9.12 overtime hours per person, so the load is concentrated in two departments rather than spread evenly.",
+      "Voluntary turnover is 11.8%, and sustained overtime in the same two departments raises the risk of losing staff there first."
+    ],
+    "recommendation": "Treat operations and maintenance as the priority for relief. Redistributing work is unlikely to be enough on its own, because the departments that are under or at capacity are much smaller.",
+    "missingInformation": [
+      "No skills matrix exists, so it is not possible to say whether work can be reassigned to other departments.",
+      "HR holds no salary or cost data, so the cost of adding capacity cannot be assessed here."
+    ],
+    "confidence": 0.91
+  }
+}

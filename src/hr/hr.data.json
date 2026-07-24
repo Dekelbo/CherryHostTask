@@ -1,0 +1,45 @@
+{
+  "reportingPeriod": "2026-Q2",
+  "totalEmployees": 34,
+  "departments": [
+    { "name": "operations", "headcount": 12, "capacityStatus": "over_capacity" },
+    { "name": "maintenance", "headcount": 6, "capacityStatus": "over_capacity" },
+    { "name": "sales", "headcount": 5, "capacityStatus": "balanced" },
+    { "name": "marketing", "headcount": 4, "capacityStatus": "balanced" },
+    { "name": "finance", "headcount": 3, "capacityStatus": "balanced" },
+    { "name": "admin_hr", "headcount": 4, "capacityStatus": "under_capacity" }
+  ],
+  "openRolesCount": 2,
+  "openRoles": [
+    {
+      "title": "Maintenance Coordinator",
+      "department": "maintenance",
+      "status": "approved",
+      "daysOpen": 63
+    },
+    {
+      "title": "Operations Associate",
+      "department": "operations",
+      "status": "pending_budget",
+      "daysOpen": 21
+    }
+  ],
+  "averageWeeklyHours": 41.5,
+  "standardWeeklyHours": 40,
+  "overtimeHoursLastMonth": 310,
+  "overtimeByDepartment": {
+    "operations": 180,
+    "maintenance": 96,
+    "sales": 14,
+    "marketing": 8,
+    "finance": 6,
+    "admin_hr": 6
+  },
+  "voluntaryTurnoverPercent": 11.8,
+  "averageTimeToHireDays": 38,
+  "knownGaps": [
+    "No salary or compensation data is held here; that is Finance-owned and outside HR's authorised scope.",
+    "No skills matrix exists, so capacity gaps cannot be attributed to specific competencies.",
+    "No forward headcount forecast is modelled beyond the currently open roles."
+  ]
+}

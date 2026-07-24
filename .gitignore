@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# environment - never commit secrets
+.env
+.env.*
+!.env.example
+
+# test / coverage
+coverage/
+.vitest/
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editors
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# misc
+.cache/
+tmp/
+
+# NOTE: src/llm/fixtures/ is intentionally NOT ignored -
+# offline mode depends on those files being committed.

@@ -1,0 +1,12 @@
+{
+  "id": "routing.ambiguous",
+  "purpose": "routing",
+  "fallback": true,
+  "match": ["how are we doing", "status", "update", "overall"],
+  "response": {
+    "target": "unsupported",
+    "confidence": 0.35,
+    "reason": "The question does not indicate whether it is about financial performance or workforce capacity, and answering either way would guess at the user's intent.",
+    "intent": "ambiguous"
+  }
+}

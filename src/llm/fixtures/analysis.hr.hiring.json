@@ -1,0 +1,74 @@
+{
+  "id": "analysis.hr.hiring",
+  "purpose": "analysis",
+  "agent": "hr",
+  "fallback": true,
+  "match": ["hire", "hiring", "people", "headcount", "expand", "staff", "recruitment", "role", "roles"],
+  "response": {
+    "agent": "hr",
+    "summary": "Operations and maintenance are both over capacity, carrying 310 overtime hours last month across 34 employees. Two roles are already open: a Maintenance Coordinator with approved budget, open 63 days, and an Operations Associate awaiting budget, open 21 days.",
+    "facts": [
+      {
+        "claim": "Operations and maintenance are over capacity.",
+        "label": "Departments over capacity",
+        "value": "operations, maintenance",
+        "sourceField": "departmentsOverCapacity",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The workforce carried 310 overtime hours last month.",
+        "label": "Overtime hours last month",
+        "value": 310,
+        "sourceField": "overtimeHoursLastMonth",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "There are 34 employees in total.",
+        "label": "Total employees",
+        "value": 34,
+        "sourceField": "totalEmployees",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The Maintenance Coordinator role already has approved budget.",
+        "label": "Open roles with approved budget",
+        "value": "Maintenance Coordinator",
+        "sourceField": "fundedOpenRoles",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The Maintenance Coordinator role has been open 63 days.",
+        "label": "Maintenance Coordinator days open",
+        "value": 63,
+        "sourceField": "openRoles.Maintenance Coordinator.daysOpen",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "The Operations Associate role is awaiting budget approval.",
+        "label": "Operations Associate budget status",
+        "value": "pending_budget",
+        "sourceField": "openRoles.Operations Associate.status",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Average time to hire is 38 days.",
+        "label": "Average time to hire",
+        "value": 38,
+        "sourceField": "averageTimeToHireDays",
+        "reportingPeriod": "2026-Q2"
+      }
+    ],
+    "concerns": [
+      "Average time to hire is 38 days, so overtime pressure continues for at least that long after any approval.",
+      "The Maintenance Coordinator role has already been open 63 days, which is well beyond the 38 day average.",
+      "Voluntary turnover is 11.8% and is most likely to bite in the two over-capacity departments."
+    ],
+    "recommendation": "There is a clear staffing case for adding capacity in maintenance and operations. The Maintenance Coordinator role is the more advanced of the two, since its budget is already approved and it has been open longest.",
+    "missingInformation": [
+      "HR holds no salary or compensation data, so affordability cannot be assessed here.",
+      "No skills matrix exists, so the roles cannot be matched to specific capability gaps.",
+      "No forward headcount forecast exists beyond the currently open roles."
+    ],
+    "confidence": 0.89
+  }
+}
