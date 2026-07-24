@@ -3,72 +3,173 @@
   "purpose": "analysis",
   "agent": "hr",
   "fallback": true,
-  "match": ["hire", "hiring", "people", "headcount", "expand", "staff", "recruitment", "role", "roles"],
+  "match": [
+    "hire",
+    "hiring",
+    "people",
+    "headcount",
+    "expand",
+    "staff",
+    "recruitment",
+    "role",
+    "roles"
+  ],
   "response": {
     "agent": "hr",
-    "summary": "Operations and maintenance are both over capacity, carrying 310 overtime hours last month across 34 employees. Two roles are already open: a Maintenance Coordinator with approved budget, open 63 days, and an Operations Associate awaiting budget, open 21 days.",
+    "summary": "Data supports hiring at least for the Maintenance Coordinator role, which is already budget-approved and open for 63 days. Operations and Maintenance are both over capacity with elevated overtime, and the Operations Associate role is open but awaiting budget approval. Total workforce is 34 with 2 open roles.",
     "facts": [
       {
-        "claim": "Operations and maintenance are over capacity.",
-        "label": "Departments over capacity",
-        "value": "operations, maintenance",
-        "sourceField": "departmentsOverCapacity",
-        "reportingPeriod": "2026-Q2"
-      },
-      {
-        "claim": "The workforce carried 310 overtime hours last month.",
-        "label": "Overtime hours last month",
-        "value": 310,
-        "sourceField": "overtimeHoursLastMonth",
-        "reportingPeriod": "2026-Q2"
-      },
-      {
-        "claim": "There are 34 employees in total.",
+        "claim": "Total employees",
         "label": "Total employees",
         "value": 34,
-        "sourceField": "totalEmployees",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "totalEmployees"
       },
       {
-        "claim": "The Maintenance Coordinator role already has approved budget.",
-        "label": "Open roles with approved budget",
+        "claim": "Open roles",
+        "label": "Open roles",
+        "value": 2,
+        "sourceField": "openRolesCount"
+      },
+      {
+        "claim": "Average weekly hours",
+        "label": "Average weekly hours",
+        "value": 41.5,
+        "sourceField": "averageWeeklyHours"
+      },
+      {
+        "claim": "Standard weekly hours",
+        "label": "Standard weekly hours",
+        "value": 40,
+        "sourceField": "standardWeeklyHours"
+      },
+      {
+        "claim": "Weekly hours above standard",
+        "label": "Weekly hours above standard",
+        "value": 1.5,
+        "sourceField": "weeklyHoursAboveStandard"
+      },
+      {
+        "claim": "Overtime hours last month (company-wide)",
+        "label": "Overtime hours last month",
+        "value": 310,
+        "sourceField": "overtimeHoursLastMonth"
+      },
+      {
+        "claim": "Overtime hours per employee",
+        "label": "Overtime hours per employee",
+        "value": 9.12,
+        "sourceField": "overtimeHoursPerEmployee"
+      },
+      {
+        "claim": "Operations headcount",
+        "label": "Operations headcount",
+        "value": 12,
+        "sourceField": "departments.operations.headcount"
+      },
+      {
+        "claim": "Operations capacity status",
+        "label": "Operations capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.operations.capacityStatus"
+      },
+      {
+        "claim": "Operations overtime hours last month",
+        "label": "Operations overtime hours",
+        "value": 180,
+        "sourceField": "overtimeByDepartment.operations"
+      },
+      {
+        "claim": "Maintenance headcount",
+        "label": "Maintenance headcount",
+        "value": 6,
+        "sourceField": "departments.maintenance.headcount"
+      },
+      {
+        "claim": "Maintenance capacity status",
+        "label": "Maintenance capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.maintenance.capacityStatus"
+      },
+      {
+        "claim": "Maintenance overtime hours last month",
+        "label": "Maintenance overtime hours",
+        "value": 96,
+        "sourceField": "overtimeByDepartment.maintenance"
+      },
+      {
+        "claim": "Departments over capacity",
+        "label": "Departments over capacity",
+        "value": "operations, maintenance",
+        "sourceField": "departmentsOverCapacity"
+      },
+      {
+        "claim": "Funded open role",
+        "label": "Funded open roles",
         "value": "Maintenance Coordinator",
-        "sourceField": "fundedOpenRoles",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "fundedOpenRoles"
       },
       {
-        "claim": "The Maintenance Coordinator role has been open 63 days.",
+        "claim": "Unfunded open role",
+        "label": "Unfunded open roles",
+        "value": "Operations Associate",
+        "sourceField": "unfundedOpenRoles"
+      },
+      {
+        "claim": "Longest open role duration",
+        "label": "Longest open role",
+        "value": 63,
+        "sourceField": "longestOpenRoleDays"
+      },
+      {
+        "claim": "Maintenance Coordinator budget status",
+        "label": "Maintenance Coordinator budget status",
+        "value": "approved",
+        "sourceField": "openRoles.Maintenance Coordinator.status"
+      },
+      {
+        "claim": "Maintenance Coordinator days open",
         "label": "Maintenance Coordinator days open",
         "value": 63,
-        "sourceField": "openRoles.Maintenance Coordinator.daysOpen",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "openRoles.Maintenance Coordinator.daysOpen"
       },
       {
-        "claim": "The Operations Associate role is awaiting budget approval.",
+        "claim": "Operations Associate budget status",
         "label": "Operations Associate budget status",
         "value": "pending_budget",
-        "sourceField": "openRoles.Operations Associate.status",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "openRoles.Operations Associate.status"
       },
       {
-        "claim": "Average time to hire is 38 days.",
+        "claim": "Operations Associate days open",
+        "label": "Operations Associate days open",
+        "value": 21,
+        "sourceField": "openRoles.Operations Associate.daysOpen"
+      },
+      {
+        "claim": "Average time to hire",
         "label": "Average time to hire",
         "value": 38,
-        "sourceField": "averageTimeToHireDays",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "averageTimeToHireDays"
+      },
+      {
+        "claim": "Voluntary turnover",
+        "label": "Voluntary turnover",
+        "value": 11.8,
+        "sourceField": "voluntaryTurnoverPercent"
       }
     ],
     "concerns": [
-      "Average time to hire is 38 days, so overtime pressure continues for at least that long after any approval.",
-      "The Maintenance Coordinator role has already been open 63 days, which is well beyond the 38 day average.",
-      "Voluntary turnover is 11.8% and is most likely to bite in the two over-capacity departments."
+      "Operations and Maintenance are both flagged as over_capacity, and together account for 180 + 96 = overtime concentrated in these two departments (values cited separately: 180 and 96 hours).",
+      "The Maintenance Coordinator role has been open 63 days, well above the average time-to-hire of 38 days, suggesting a prolonged capacity gap in an already over-capacity department.",
+      "The Operations Associate role is still pending_budget approval despite Operations being over capacity, meaning no headcount relief is currently underway for that team.",
+      "Voluntary turnover of 11.8 percent combined with average weekly hours (41.5) exceeding standard (40) may indicate sustained overtime pressure, though the data cannot confirm a causal link."
     ],
-    "recommendation": "There is a clear staffing case for adding capacity in maintenance and operations. The Maintenance Coordinator role is the more advanced of the two, since its budget is already approved and it has been open longest.",
+    "recommendation": "Proceed with finalizing the hire for the Maintenance Coordinator role since it is already budget-approved and has been open for 63 days in an over-capacity department. For the Operations Associate role, escalate the pending budget approval given Operations is also flagged as over_capacity with 180 overtime hours last month — but final go-ahead depends on Finance confirming affordability, which HR cannot assess. No broader hiring beyond these two identified roles is indicated by current data, as other departments show balanced or under_capacity status.",
     "missingInformation": [
-      "HR holds no salary or compensation data, so affordability cannot be assessed here.",
-      "No skills matrix exists, so the roles cannot be matched to specific capability gaps.",
-      "No forward headcount forecast exists beyond the currently open roles."
+      "No salary, budget, or cost data is available to HR to assess whether hiring for the Operations Associate role (or any role) is financially affordable — this is Finance-owned data.",
+      "No skills matrix exists, so it's not possible to confirm whether current overtime/capacity issues in Operations and Maintenance stem from headcount shortage versus skill gaps.",
+      "No forward headcount forecast exists beyond the two currently open roles, so future hiring needs cannot be projected from this data."
     ],
-    "confidence": 0.89
-  }
+    "confidence": 0.7
+  },
+  "recordedAt": "2026-07-24"
 }

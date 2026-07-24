@@ -28,6 +28,14 @@ const TOOL_NAME = "submit_analysis";
 /** Bounds the parallel `both` route and models the real rate-limit strategy. */
 const MAX_CONCURRENT_REQUESTS = 4;
 
+/**
+ * Generous by design. A structured analysis that runs past this cap is
+ * truncated mid-JSON and fails to parse — observed live at 2048, where the HR
+ * agent silently burned both attempts. max_tokens is a ceiling, not a target,
+ * so headroom costs nothing when unused.
+ */
+const DEFAULT_MAX_TOKENS = 16_000;
+
 export function createAnthropicClient(env: Env): LlmClient {
   if (!env.ANTHROPIC_API_KEY) {
     throw new ConfigError("ANTHROPIC_API_KEY is required when LLM_PROVIDER=anthropic.");
@@ -64,8 +72,7 @@ export function createAnthropicClient(env: Env): LlmClient {
         () =>
           client.messages.create({
             model,
-            max_tokens: input.maxTokens ?? 2048,
-            temperature: temperatureFor(input.purpose),
+            max_tokens: input.maxTokens ?? DEFAULT_MAX_TOKENS,
             system: input.systemPrompt,
             messages: [{ role: "user", content: userPrompt }],
             tools: [
@@ -80,6 +87,14 @@ export function createAnthropicClient(env: Env): LlmClient {
         env.LLM_MAX_RETRIES,
       ),
     );
+
+    // Truncation is reported precisely: a generic parse failure here sends the
+    // reader hunting through the schema for a problem that is really a budget.
+    if (message.stop_reason === "max_tokens") {
+      throw new SchemaValidationError(
+        "The model's structured response was cut off by the output token limit before it could be completed.",
+      );
+    }
 
     const toolUse = message.content.find((block) => block.type === "tool_use");
     if (!toolUse || toolUse.type !== "tool_use") {
@@ -131,8 +146,7 @@ export function createAnthropicClient(env: Env): LlmClient {
               client.messages.create({
                 model: modelFor(input.purpose, env),
                 max_tokens: 1024,
-                temperature: temperatureFor(input.purpose),
-                system: input.systemPrompt,
+                    system: input.systemPrompt,
                 messages: [{ role: "user", content: input.userPrompt }],
               }),
             env.LLM_MAX_RETRIES,
@@ -160,9 +174,14 @@ function modelFor(purpose: LlmPurpose, env: Env): string {
   return purpose === "routing" ? env.ANTHROPIC_ROUTING_MODEL : env.ANTHROPIC_ANALYSIS_MODEL;
 }
 
-function temperatureFor(purpose: LlmPurpose): number {
-  return purpose === "routing" ? 0 : 0.2;
-}
+/**
+ * `temperature` is deliberately not sent.
+ *
+ * Current-generation models reject it — Sonnet 5 returns
+ * `400 "temperature is deprecated for this model"` — and steer through
+ * prompting instead. That suits this system: determinism comes from computing
+ * metrics in code and verifying every claim, not from a sampling parameter.
+ */
 
 function toUsage(usage: Anthropic.Usage): { inputTokens: number; outputTokens: number } {
   return { inputTokens: usage.input_tokens, outputTokens: usage.output_tokens };

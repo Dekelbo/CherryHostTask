@@ -3,48 +3,63 @@
   "purpose": "analysis",
   "agent": "hr",
   "fallback": false,
-  "match": ["capacity", "over capacity", "workload", "overtime", "turnover", "team", "teams"],
+  "match": [
+    "capacity",
+    "over capacity",
+    "workload",
+    "overtime",
+    "turnover",
+    "team",
+    "teams"
+  ],
   "response": {
     "agent": "hr",
-    "summary": "Two departments are over capacity. Operations has 12 people and carried 180 overtime hours last month; maintenance has 6 people and carried 96 overtime hours.",
+    "summary": "Two departments are currently flagged as over capacity: Operations and Maintenance.",
     "facts": [
       {
-        "claim": "Operations is over capacity.",
-        "label": "operations capacity status",
-        "value": "over_capacity",
-        "sourceField": "departments.operations.capacityStatus",
+        "claim": "Departments over capacity",
+        "label": "Departments over capacity",
+        "value": "operations, maintenance",
+        "sourceField": "departmentsOverCapacity",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "Operations has 12 employees.",
+        "claim": "Operations headcount",
         "label": "operations headcount",
         "value": 12,
         "sourceField": "departments.operations.headcount",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "Operations carried 180 overtime hours last month.",
+        "claim": "Operations capacity status",
+        "label": "operations capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.operations.capacityStatus",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Operations overtime hours last month",
         "label": "operations overtime hours last month",
         "value": 180,
         "sourceField": "overtimeByDepartment.operations",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "Maintenance is over capacity.",
-        "label": "maintenance capacity status",
-        "value": "over_capacity",
-        "sourceField": "departments.maintenance.capacityStatus",
-        "reportingPeriod": "2026-Q2"
-      },
-      {
-        "claim": "Maintenance has 6 employees.",
+        "claim": "Maintenance headcount",
         "label": "maintenance headcount",
         "value": 6,
         "sourceField": "departments.maintenance.headcount",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "Maintenance carried 96 overtime hours last month.",
+        "claim": "Maintenance capacity status",
+        "label": "maintenance capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.maintenance.capacityStatus",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Maintenance overtime hours last month",
         "label": "maintenance overtime hours last month",
         "value": 96,
         "sourceField": "overtimeByDepartment.maintenance",
@@ -52,14 +67,17 @@
       }
     ],
     "concerns": [
-      "Across 34 employees the average is 9.12 overtime hours per person, so the load is concentrated in two departments rather than spread evenly.",
-      "Voluntary turnover is 11.8%, and sustained overtime in the same two departments raises the risk of losing staff there first."
+      "Operations (12 headcount) logged 180 overtime hours last month, the highest of any department, consistent with its over-capacity status.",
+      "Maintenance (6 headcount) logged 96 overtime hours last month, also consistent with over-capacity status, and this is the smaller team so the strain per person may be more acute.",
+      "Both over-capacity departments have an open role: Maintenance Coordinator (approved, 63 days open - the longest open role) and Operations Associate (pending budget, 21 days open), suggesting hiring is already underway but not yet resolved."
     ],
-    "recommendation": "Treat operations and maintenance as the priority for relief. Redistributing work is unlikely to be enough on its own, because the departments that are under or at capacity are much smaller.",
+    "recommendation": "Prioritize finalizing the approved Maintenance Coordinator hire given it has been open 63 days, and escalate budget approval for the Operations Associate role since Operations is the largest team by overtime hours and headcount among the over-capacity departments. Consider reviewing whether overtime patterns in these two departments justify additional headcount beyond the currently open roles, though a skills/workload deep-dive would need data not held in this system.",
     "missingInformation": [
-      "No skills matrix exists, so it is not possible to say whether work can be reassigned to other departments.",
-      "HR holds no salary or cost data, so the cost of adding capacity cannot be assessed here."
+      "No skills matrix exists, so it's not possible to say whether the over-capacity issue in operations/maintenance stems from specific skill gaps.",
+      "No salary or budget data is available in HR's authorised fields, so the cost implications of filling these roles cannot be assessed here (Finance-owned data).",
+      "No forward headcount forecast beyond the two currently open roles, so it's unclear if capacity pressure will persist or grow."
     ],
-    "confidence": 0.91
-  }
+    "confidence": 0.95
+  },
+  "recordedAt": "2026-07-24"
 }

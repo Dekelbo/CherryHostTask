@@ -5,9 +5,11 @@ import { describe, expect, it } from "vitest";
 import { CoordinatorOutputSchema, LlmAnalysisSchema } from "../src/domain/schemas";
 import type { AgentAnalysis, CoordinatorOutput, DepartmentAgent } from "../src/domain/types";
 import { createFinanceAgent } from "../src/finance/finance.agent";
+import { buildFinanceFactSheet } from "../src/finance/finance.facts";
 import financeJson from "../src/finance/finance.data.json";
 import type { FinanceData } from "../src/finance/finance.types";
 import { createHrAgent } from "../src/hr/hr.agent";
+import { buildHrFactSheet } from "../src/hr/hr.facts";
 import hrJson from "../src/hr/hr.data.json";
 import type { HrData } from "../src/hr/hr.types";
 import type { LlmClient, LlmResponse, StructuredRequest } from "../src/llm/client";
@@ -124,6 +126,42 @@ describe("joint orchestration", () => {
     expect(constraints.maxAffordableHires).toBe(1);
     expect(constraints.departmentsOverCapacity).toBe("operations, maintenance");
     expect(constraints.fundedOpenRoles).toBe("Maintenance Coordinator");
+  });
+
+  it("derives constraints from per-role facts when the summary fields are not cited", async () => {
+    // Observed live: the HR agent cited openRoles.<title>.status rather than the
+    // derived fundedOpenRoles field, so the constraint read "none reported".
+    // A constraint must not depend on the agent picking one exact field.
+    const hr = await analysisFor("hr");
+    const perRoleOnly: AgentAnalysis = {
+      ...hr,
+      facts: [
+        {
+          claim: "The Maintenance Coordinator role has approved budget.",
+          label: "Maintenance Coordinator budget status",
+          value: "approved",
+          sourceField: "openRoles.Maintenance Coordinator.status",
+        },
+        {
+          claim: "Operations is over capacity.",
+          label: "operations capacity status",
+          value: "over_capacity",
+          sourceField: "departments.operations.capacityStatus",
+        },
+      ],
+      verification: {
+        ...hr.verification,
+        verifiedFields: [
+          "openRoles.Maintenance Coordinator.status",
+          "departments.operations.capacityStatus",
+        ],
+      },
+    };
+
+    const constraints = deriveJointConstraints(await analysisFor("finance"), perRoleOnly);
+
+    expect(constraints.fundedOpenRoles).toBe("Maintenance Coordinator");
+    expect(constraints.departmentsOverCapacity).toBe("operations");
   });
 
   it("keeps supporting facts a subset of the upstream verified facts", async () => {
@@ -284,10 +322,21 @@ describe("coordinator isolation", () => {
 
     await runJointRecommendation({ llm: spy, question: QUESTION, finance, hr });
 
-    // Fields the agents never cited must not appear anywhere in the prompt.
-    expect(capturedPrompt).not.toContain("outstandingReceivables");
-    expect(capturedPrompt).not.toContain("voluntaryTurnoverPercent");
-    expect(capturedPrompt).not.toContain("operatingCostBreakdown");
+    // Derive the uncited fields rather than hardcoding them: which fields an
+    // agent chooses to cite changes as prompts and fixtures evolve, but the
+    // invariant does not — anything the agents did not report must not reach
+    // the coordinator, because the coordinator never sees raw data.
+    const cited = new Set([...finance.fieldsUsed, ...hr.fieldsUsed]);
+    const allFields = [
+      ...Object.keys(buildFinanceFactSheet(financeData).entries),
+      ...Object.keys(buildHrFactSheet(hrData).entries),
+    ];
+    const uncited = allFields.filter((field) => !cited.has(field));
+
+    expect(uncited.length).toBeGreaterThan(0);
+    for (const field of uncited) {
+      expect(capturedPrompt).not.toContain(field);
+    }
   });
 });
 

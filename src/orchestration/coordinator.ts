@@ -1,3 +1,4 @@
+import { userFacingMessage } from "../domain/errors";
 import { CoordinatorOutputSchema } from "../domain/schemas";
 import type {
   AgentAnalysis,
@@ -45,9 +46,39 @@ export function deriveJointConstraints(
 ): JointConstraints {
   return {
     maxAffordableHires: numericFact(finance, "maxAffordableAdditionalHires"),
-    departmentsOverCapacity: stringFact(hr, "departmentsOverCapacity") ?? "not reported",
-    fundedOpenRoles: stringFact(hr, "fundedOpenRoles") ?? "none reported",
+    departmentsOverCapacity:
+      stringFact(hr, "departmentsOverCapacity") ?? derivedOverCapacity(hr) ?? "not reported",
+    fundedOpenRoles: stringFact(hr, "fundedOpenRoles") ?? derivedFundedRoles(hr) ?? "none reported",
   };
+}
+
+/**
+ * The agent chooses which fields to cite, so a constraint cannot depend on one
+ * exact field being present. These fall back to the equivalent per-item facts —
+ * still only *verified* facts, never raw data.
+ */
+function derivedFundedRoles(hr: AgentAnalysis): string | undefined {
+  const roles = verifiedFacts(hr)
+    .filter((fact) => /^openRoles\..+\.status$/.test(fact.sourceField))
+    .filter((fact) => String(fact.value) === "approved")
+    .map((fact) => fact.sourceField.split(".").slice(1, -1).join("."));
+
+  return roles.length > 0 ? roles.join(", ") : undefined;
+}
+
+function derivedOverCapacity(hr: AgentAnalysis): string | undefined {
+  const departments = verifiedFacts(hr)
+    .filter((fact) => /^departments\..+\.capacityStatus$/.test(fact.sourceField))
+    .filter((fact) => String(fact.value) === "over_capacity")
+    .map((fact) => fact.sourceField.split(".")[1] ?? "");
+
+  return departments.length > 0 ? departments.join(", ") : undefined;
+}
+
+function verifiedFacts(analysis: AgentAnalysis): GroundedFact[] {
+  return analysis.facts.filter((fact) =>
+    analysis.verification.verifiedFields.includes(fact.sourceField),
+  );
 }
 
 function findVerifiedFact(analysis: AgentAnalysis, sourceField: string): GroundedFact | undefined {
@@ -211,10 +242,13 @@ export async function answerJointQuestion(input: {
 async function safeAnswer(agent: DepartmentAgent, question: string): Promise<AgentAnalysis> {
   try {
     return await agent.answer(question);
-  } catch {
+  } catch (error) {
+    // Keep the reason. Swallowing it leaves the reader with "unverified" and no
+    // way to tell a truncated response from a provider outage.
+    const reason = userFacingMessage(error);
     const verification: VerificationResult = {
       valid: false,
-      errors: [`The ${agent.id} agent could not produce a verified analysis.`],
+      errors: [`The ${agent.id} agent could not produce a verified analysis: ${reason}`],
       issues: [],
       verifiedFields: [],
     };
@@ -225,7 +259,7 @@ async function safeAnswer(agent: DepartmentAgent, question: string): Promise<Age
       facts: [],
       concerns: [],
       recommendation: "No recommendation is available from this department.",
-      missingInformation: [`The ${agent.id} analysis is unavailable.`],
+      missingInformation: [`The ${agent.id} analysis is unavailable: ${reason}`],
       confidence: 0,
       trusted: false,
       verification,

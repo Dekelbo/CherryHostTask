@@ -2,11 +2,17 @@
   "id": "routing.ambiguous",
   "purpose": "routing",
   "fallback": true,
-  "match": ["how are we doing", "status", "update", "overall"],
+  "match": [
+    "how are we doing",
+    "status",
+    "update",
+    "overall"
+  ],
   "response": {
     "target": "unsupported",
-    "confidence": 0.35,
-    "reason": "The question does not indicate whether it is about financial performance or workforce capacity, and answering either way would guess at the user's intent.",
-    "intent": "ambiguous"
-  }
+    "confidence": 0.3,
+    "reason": "The question is too vague to route to a specific department. \"How are we doing?\" could refer to financial performance, team capacity, overall business health, or numerous other metrics. More specific information is needed to determine whether this is a finance question, HR question, or both.",
+    "intent": "General business status inquiry"
+  },
+  "recordedAt": "2026-07-24"
 }

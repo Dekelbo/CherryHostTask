@@ -3,64 +3,104 @@
   "purpose": "analysis",
   "agent": "finance",
   "fallback": true,
-  "match": ["hire", "hiring", "afford", "budget", "people", "headcount", "expand", "team"],
+  "match": [
+    "hire",
+    "hiring",
+    "afford",
+    "budget",
+    "people",
+    "headcount",
+    "expand",
+    "team"
+  ],
   "response": {
     "agent": "finance",
-    "summary": "The available annual hiring budget is €52,000: €96,000 approved less €44,000 already committed. At the benchmark loaded cost of €48,000 per hire, that funds 1 additional hire and no more.",
+    "summary": "Based on current financials, there is limited but nonzero room to hire: available hiring budget supports at most 1 additional hire this fiscal year, assuming the benchmark loaded cost per hire holds.",
     "facts": [
       {
-        "claim": "The approved annual hiring budget is €96,000.",
+        "claim": "Monthly operating profit for the period",
+        "label": "Monthly operating profit",
+        "value": 56000,
+        "sourceField": "monthlyOperatingProfit",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Operating margin for the period",
+        "label": "Operating margin",
+        "value": 13.59,
+        "sourceField": "operatingMarginPercent",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Cash on hand",
+        "label": "Cash on hand",
+        "value": 2848000,
+        "sourceField": "cashOnHand",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Cash runway in a zero-revenue stress scenario",
+        "label": "Cash runway (months)",
+        "value": 8,
+        "sourceField": "cashRunwayMonths",
+        "reportingPeriod": "2026-Q2"
+      },
+      {
+        "claim": "Total approved annual hiring budget",
         "label": "Approved annual hiring budget",
         "value": 96000,
         "sourceField": "approvedAnnualHiringBudget",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "€44,000 of the hiring budget is already committed.",
-        "label": "Already committed hiring budget",
+        "claim": "Amount of hiring budget already committed",
+        "label": "Committed annual hiring budget",
         "value": 44000,
         "sourceField": "committedAnnualHiringBudget",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "The available annual hiring budget is €52,000.",
+        "claim": "Remaining uncommitted hiring budget available",
         "label": "Available annual hiring budget",
         "value": 52000,
         "sourceField": "availableAnnualHiringBudget",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "The benchmark annual loaded cost per hire is €48,000.",
+        "claim": "Benchmark market cost assumption per new hire, loaded annually",
         "label": "Benchmark annual loaded cost per hire",
         "value": 48000,
         "sourceField": "benchmarkAnnualLoadedCostPerHire",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "At most 1 additional hire is affordable.",
+        "claim": "Maximum number of additional hires affordable within available budget",
         "label": "Maximum affordable additional hires",
         "value": 1,
         "sourceField": "maxAffordableAdditionalHires",
         "reportingPeriod": "2026-Q2"
       },
       {
-        "claim": "Cash runway is 8 months.",
-        "label": "Cash runway",
-        "value": 8,
-        "sourceField": "cashRunwayMonths",
+        "claim": "Projected annual growth rate used for planning",
+        "label": "Projected annual growth",
+        "value": 12,
+        "sourceField": "projectedAnnualGrowthPercent",
         "reportingPeriod": "2026-Q2"
       }
     ],
     "concerns": [
-      "A second hire would exceed the available hiring budget of €52,000 unless the approved figure is raised.",
-      "Cash runway of 8 months is measured against a zero-revenue stress case, so it is a floor rather than a forecast."
+      "The benchmarkAnnualLoadedCostPerHire (48,000 EUR) is a market assumption, not an agreed offer figure, so actual cost per hire could differ and change affordability.",
+      "Available hiring budget (52,000 EUR) only comfortably covers one hire at the benchmark cost; a second hire would exceed the approved annual hiring budget.",
+      "Projected 12% annual growth is a forward-looking projection, not contracted revenue, so it should not be treated as guaranteed income to justify additional hiring costs."
     ],
-    "recommendation": "Fund at most 1 additional role this period, and cap its loaded annual cost at the €48,000 benchmark. Any second hire needs either a budget increase or evidence of committed new revenue.",
+    "recommendation": "Financially, the numbers support funding at most one additional hire within the current approved annual hiring budget (52,000 EUR available against a 48,000 EUR benchmark cost). Operating margin (13.59%) and cash runway (8 months in a zero-revenue stress case) suggest the business is not under near-term cash pressure, but the growth figure used to justify expansion is a projection, not committed revenue. I cannot advise on which role, department, or specific compensation package to hire for — that decision requires HR input on headcount planning, role scoping, and actual compensation offers, which falls outside Finance's authorised data.",
     "missingInformation": [
-      "The €48,000 loaded cost per hire is a market benchmark and an assumption, not an agreed offer figure.",
-      "No per-department cost allocation exists, so the cost impact on a specific team cannot be isolated.",
-      "Finance holds no staffing or capacity data, so it cannot say which team should receive a hire."
+      "Current staffing levels, headcount, or capacity utilization data (owned by HR, not in Finance's dataset).",
+      "Actual salary or offer figures for any specific hire, as opposed to the market benchmark assumption.",
+      "Department-level cost allocation, which would clarify where additional headcount is most needed.",
+      "Any committed new-revenue pipeline to validate whether the 12% growth projection is realistic enough to support added payroll."
     ],
-    "confidence": 0.88
-  }
+    "confidence": 0.75
+  },
+  "recordedAt": "2026-07-24"
 }

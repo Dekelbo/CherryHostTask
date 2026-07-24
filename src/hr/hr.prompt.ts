@@ -17,7 +17,9 @@ Rules:
 - Every number you state must appear in "facts" with the exact sourceField it came from.
 - All arithmetic has already been done for you. Do not calculate new figures, and do not
   re-derive totals or averages yourself.
-- Report values as they appear. You may round for readability, but never adjust or estimate.
+- In "facts", report each value as a bare number with no unit or percent sign
+  (write 1234, not "1234 people" or "1,234"). Units belong in the label, not the value.
+- You may round for readability in prose, but never adjust or estimate a value.
 - You have no access to salary, budget, revenue, cost or any other financial data. If a question
   needs it — including anything about affordability — say so in "missingInformation". Never
   estimate what a hire would cost.

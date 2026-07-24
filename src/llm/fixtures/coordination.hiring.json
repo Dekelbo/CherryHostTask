@@ -2,58 +2,126 @@
   "id": "coordination.hiring",
   "purpose": "coordination",
   "fallback": true,
-  "match": ["hire", "hiring", "afford", "expand", "headcount", "people", "team"],
+  "match": [
+    "hire",
+    "hiring",
+    "afford",
+    "expand",
+    "headcount",
+    "people",
+    "team"
+  ],
   "response": {
     "recommendation": "hire_conditionally",
-    "headline": "Fill the already-approved maintenance role now; hold the operations role until budget is available.",
-    "summary": "HR reports two departments over capacity with two roles already open, while Finance can fund exactly 1 additional hire from the €52,000 available hiring budget. Filling the Maintenance Coordinator role resolves the vacancy that is both funded and longest open, without exceeding what Finance can support.",
-    "financePerspective": "The available annual hiring budget is €52,000, being €96,000 approved less €44,000 already committed. At the €48,000 benchmark loaded cost that funds 1 hire and no more, against 8 months of cash runway.",
-    "hrPerspective": "Operations and maintenance are both over capacity, carrying 310 overtime hours last month across 34 employees. The Maintenance Coordinator role already has approved budget and has been open 63 days, while the Operations Associate role is still awaiting budget.",
+    "headline": "Hire the Maintenance Coordinator now; Operations Associate hire not currently affordable",
+    "summary": "Finance and HR data converge on a single actionable hire: the Maintenance Coordinator role, which is both budget-approved and addresses a real capacity gap (maintenance is over_capacity, role open 63 days vs 38-day average). This fits within Finance's verified limit of 1 affordable additional hire. The Operations Associate role, while also justified by HR's over_capacity and overtime data (180 hours), remains pending_budget and would require a second hire — which exceeds the affordable-hire ceiling computed from Finance's available budget. There is no disagreement in principle between Finance and HR; the deciding factor is the hard constraint that only 1 hire is currently fundable, and that hire should go to the role that already has approved budget.",
+    "financePerspective": "Finance confirms at most 1 additional hire is affordable this fiscal year (52,000 EUR available vs 48,000 EUR benchmark cost per hire). Operating margin (13.59%) and 8-month cash runway suggest no near-term cash pressure, but the 12% growth projection is unconfirmed revenue and should not justify hiring beyond the 1-hire limit. Finance has no visibility into which department or role needs headcount most.",
+    "hrPerspective": "HR identifies two open roles: Maintenance Coordinator (budget-approved, open 63 days, in an over-capacity department with 96 overtime hours) and Operations Associate (pending budget approval, in an over-capacity department with 180 overtime hours). HR recommends proceeding with Maintenance Coordinator now and escalating budget approval for Operations Associate, but defers affordability confirmation to Finance.",
     "conditions": [
-      "Fill only the Maintenance Coordinator role, which already carries approved budget.",
-      "Cap the loaded annual cost at the €48,000 benchmark used in the affordability calculation.",
-      "Re-assess the Operations Associate role at the next reporting period, once overtime and budget positions are refreshed."
+      "Finalize the Maintenance Coordinator hire only, as it is the sole role with approved budget and fits within the 1 affordable additional hire.",
+      "Do not proceed with the Operations Associate hire until it receives budget approval AND Finance confirms affordability within the annual hiring budget — this would exceed the current 1-hire capacity.",
+      "Confirm actual compensation offer for Maintenance Coordinator against the 48,000 EUR benchmark to ensure it stays within the 52,000 EUR available budget."
     ],
     "risks": [
-      "Operations remains over capacity and its role is unfunded, so pressure there is not relieved by this decision.",
-      "Average time to hire is 38 days, so overtime continues well after approval.",
-      "Adding capacity in maintenance only may shift informal workload onto operations rather than reducing it."
+      "Benchmark cost per hire (48,000 EUR) is an assumption; actual Maintenance Coordinator compensation could exceed available budget (52,000 EUR), eliminating the hiring margin.",
+      "Operations remains over_capacity with 180 overtime hours and no funded relief, risking continued overtime costs, burnout, or turnover (voluntary turnover already at 11.8%).",
+      "Hiring a second person (Operations Associate) is not currently affordable per Finance's verified maximum of 1 additional hire; pursuing it without new budget approval would violate the approved annual hiring budget.",
+      "Growth projection (12%) used to rationalize expansion is not committed revenue and should not be used to justify hiring beyond the verified affordable limit."
     ],
     "missingInformation": [
-      "The €48,000 loaded cost per hire is a benchmark assumption, not an agreed offer, so the true cost of the hire is uncertain.",
-      "No per-department cost allocation exists, so the financial impact on maintenance specifically cannot be isolated.",
-      "No skills matrix exists, so it is unclear whether reassignment could relieve operations without a hire."
+      "Actual compensation offer for Maintenance Coordinator versus the 48,000 EUR benchmark.",
+      "Department-level cost allocation clarifying financial impact of hiring into Maintenance specifically.",
+      "Whether Operations Associate budget approval is likely or timeline for potential approval.",
+      "Skills matrix data to confirm whether Operations/Maintenance overtime stems from headcount shortage vs. skill gaps.",
+      "Any committed revenue pipeline to validate the 12% growth projection."
     ],
     "supportingFacts": [
       {
-        "claim": "The available annual hiring budget is €52,000.",
-        "label": "Available annual hiring budget",
-        "value": 52000,
-        "sourceField": "availableAnnualHiringBudget",
-        "reportingPeriod": "2026-Q2"
-      },
-      {
-        "claim": "At most 1 additional hire is affordable.",
+        "claim": "Maximum affordable additional hires this fiscal year",
         "label": "Maximum affordable additional hires",
         "value": 1,
         "sourceField": "maxAffordableAdditionalHires",
-        "reportingPeriod": "2026-Q2"
+        "reportingPeriod": "current fiscal year"
       },
       {
-        "claim": "Operations and maintenance are over capacity.",
+        "claim": "Available annual hiring budget after committed costs",
+        "label": "Available annual hiring budget",
+        "value": 52000,
+        "sourceField": "availableAnnualHiringBudget",
+        "reportingPeriod": "current fiscal year"
+      },
+      {
+        "claim": "Benchmark annual loaded cost per hire used for affordability calculation",
+        "label": "Benchmark annual loaded cost per hire",
+        "value": 48000,
+        "sourceField": "benchmarkAnnualLoadedCostPerHire",
+        "reportingPeriod": "current fiscal year"
+      },
+      {
+        "claim": "Operating margin indicates no near-term cash pressure",
+        "label": "Operating margin",
+        "value": 13.59,
+        "sourceField": "operatingMarginPercent",
+        "reportingPeriod": "current period"
+      },
+      {
+        "claim": "Cash runway in a zero-revenue stress scenario",
+        "label": "Cash runway (months)",
+        "value": 8,
+        "sourceField": "cashRunwayMonths",
+        "reportingPeriod": "current period"
+      },
+      {
+        "claim": "Projected growth is a forward-looking assumption, not committed revenue",
+        "label": "Projected annual growth",
+        "value": 12,
+        "sourceField": "projectedAnnualGrowthPercent",
+        "reportingPeriod": "forward-looking projection"
+      },
+      {
+        "claim": "Maintenance Coordinator role has approved budget",
+        "label": "Maintenance Coordinator budget status",
+        "value": "approved",
+        "sourceField": "openRoles.Maintenance Coordinator.status"
+      },
+      {
+        "claim": "Maintenance Coordinator role has been open significantly longer than average time-to-hire",
+        "label": "Maintenance Coordinator days open",
+        "value": 63,
+        "sourceField": "openRoles.Maintenance Coordinator.daysOpen"
+      },
+      {
+        "claim": "Maintenance department is over capacity",
+        "label": "Maintenance capacity status",
+        "value": "over_capacity",
+        "sourceField": "departments.maintenance.capacityStatus"
+      },
+      {
+        "claim": "Operations Associate role lacks budget approval",
+        "label": "Operations Associate budget status",
+        "value": "pending_budget",
+        "sourceField": "openRoles.Operations Associate.status"
+      },
+      {
+        "claim": "Operations department is over capacity with significant overtime",
+        "label": "Operations overtime hours",
+        "value": 180,
+        "sourceField": "overtimeByDepartment.operations"
+      },
+      {
+        "claim": "Departments currently over capacity",
         "label": "Departments over capacity",
         "value": "operations, maintenance",
-        "sourceField": "departmentsOverCapacity",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "departmentsOverCapacity"
       },
       {
-        "claim": "The Maintenance Coordinator role already has approved budget.",
-        "label": "Open roles with approved budget",
+        "claim": "Only one role currently has funding approval",
+        "label": "Funded open roles",
         "value": "Maintenance Coordinator",
-        "sourceField": "fundedOpenRoles",
-        "reportingPeriod": "2026-Q2"
+        "sourceField": "fundedOpenRoles"
       }
     ],
-    "confidence": 0.79
-  }
+    "confidence": 0.78
+  },
+  "recordedAt": "2026-07-24"
 }

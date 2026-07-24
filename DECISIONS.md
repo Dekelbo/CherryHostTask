@@ -119,7 +119,41 @@ retry in the client.
 the real verifier by tests to limit that.
 **Rejected.** Requiring a key to see anything work.
 
-### 14. Intentionally excluded
+### 14. No `temperature`, and units tolerated in reported values
+
+**Decision.** The provider client sends no sampling parameters, and the verifier accepts a value
+that carries a documented unit (`"412000 EUR"`, `"13.59 percent"`).
+**Why.** Both were forced by the live API. Sonnet 5 rejects `temperature` outright
+(`400 "temperature is deprecated for this model"`), and the model echoes the unit shown in the fact
+sheet — a correct value that the first normaliser rejected, costing a repair round-trip on every
+single call. Stripping a known unit is safe because the numeric part must still match exactly.
+**Trade-off.** Determinism can no longer be dialled with a sampling knob; it comes from computing
+metrics in code and verifying every claim, which is where it belonged anyway.
+**Rejected.** Keeping `temperature` behind a model check — it would rot as models change.
+
+### 15. Generous output token ceiling, with truncation named explicitly
+
+**Decision.** `max_tokens` defaults to 16,000 for structured calls, and a `max_tokens` stop reason
+raises a distinct error rather than a generic parse failure.
+**Why.** At 2,048 the HR agent silently burned both attempts: the JSON was cut mid-write, failed to
+parse, and surfaced as "could not return a valid structure" — which sends the reader hunting through
+the schema for a problem that was really a budget. `max_tokens` is a ceiling, not a target, so
+headroom costs nothing when unused.
+**Trade-off.** A runaway response could spend more; the token budget is the backstop.
+**Rejected.** Raising the cap without naming the failure — the next person hits the same confusion.
+
+### 16. Constraints derive from whichever verified facts exist
+
+**Decision.** `fundedOpenRoles` and `departmentsOverCapacity` fall back to per-item facts
+(`openRoles.<title>.status`, `departments.<name>.capacityStatus`) when the summary field is not cited.
+**Why.** The live HR agent cited the per-role fields instead of the derived ones, so the coordinator
+reported "none reported" for a role that was in fact funded. A constraint must not depend on the
+model picking one exact field name.
+**Trade-off.** Two ways to reach the same constraint, so the derivation needs its own test.
+**Rejected.** Prompting the agent to always cite the summary field — that is a request, not a
+guarantee, which is the whole thesis of this codebase.
+
+### 17. Intentionally excluded
 
 UI, database, authentication, queues, vector store, eight agents, agent framework, streaming,
 conversation memory, Docker, CI. Each is judgement, not omission: the assessment asks for a small,
@@ -141,3 +175,6 @@ Recorded honestly rather than quietly absorbed.
   resolution has been removed. The project uses `nodenext` resolution and remains CommonJS.
 - **Environment loading.** `loadEnv()` is called by the CLI rather than executed at import, so a
   misconfiguration produces a readable message and exit code 3 instead of an import-time throw.
+- **Fixtures are recorded, not authored.** `src/llm/fixtures/` was captured from real Anthropic
+  responses on 2026-07-24 via `scripts/capture-fixtures.ts`, which refuses to record any response
+  that fails verification. Each file carries a `recordedAt` date.

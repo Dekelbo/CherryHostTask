@@ -90,11 +90,46 @@ export function normaliseValue(value: string | number): number | string {
   return numeric ?? trimmed.toLowerCase();
 }
 
+/**
+ * Units a model may legitimately echo from the fact sheet ("412000 EUR",
+ * "13.59 percent"). Stripping a trailing unit is safe: the numeric part must
+ * still match the authorised value exactly, so no wrong number gets through.
+ * Longest first, so "hours per week" is tried before "hours".
+ */
+const UNIT_SUFFIXES = [
+  "hours per week",
+  "employees",
+  "percent",
+  "people",
+  "person",
+  "months",
+  "month",
+  "hours",
+  "hour",
+  "days",
+  "day",
+  "eur",
+  "usd",
+  "gbp",
+];
+
 function parseNumericToken(token: string): number | null {
-  const cleaned = token
-    .replace(/[€$£\s]/g, "")
+  let cleaned = token
+    .toLowerCase()
+    .trim()
+    .replace(/[€$£]/g, "")
     .replace(/,/g, "")
-    .replace(/%$/, "");
+    .replace(/%$/, "")
+    .trim();
+
+  for (const unit of UNIT_SUFFIXES) {
+    if (cleaned.endsWith(unit)) {
+      cleaned = cleaned.slice(0, -unit.length).trim();
+      break;
+    }
+  }
+
+  cleaned = cleaned.replace(/\s/g, "");
 
   const match = /^(-?\d+(?:\.\d+)?)([km])?$/i.exec(cleaned);
   if (!match) return null;

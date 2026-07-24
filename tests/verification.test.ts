@@ -42,6 +42,24 @@ describe("value normalisation", () => {
     expect(normaliseValue("52k")).toBe(52_000);
   });
 
+  it("accepts a value that carries the unit copied from the fact sheet", () => {
+    // Observed against the live API: the model echoes the unit from the sheet
+    // ("412000 EUR", "13.59 percent"). The number is correct, so rejecting it
+    // was a false positive that cost a repair round-trip on every call.
+    expect(normaliseValue("412000 EUR")).toBe(412_000);
+    expect(normaliseValue("13.59 percent")).toBe(13.59);
+    expect(normaliseValue("8 months")).toBe(8);
+    expect(normaliseValue("34 people")).toBe(34);
+    expect(normaliseValue("41.5 hours per week")).toBe(41.5);
+  });
+
+  it("still rejects a wrong number even when it carries a valid unit", () => {
+    const result = verifyGroundedFacts(financeSheet, [fact({ value: "52500 EUR" })]);
+
+    expect(result.valid).toBe(false);
+    expect(result.issues[0]?.code).toBe("VALUE_MISMATCH");
+  });
+
   it("falls back to case-insensitive string comparison for non-numeric values", () => {
     expect(normaliseValue("  Over_Capacity ")).toBe("over_capacity");
   });
