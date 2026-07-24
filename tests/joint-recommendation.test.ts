@@ -95,6 +95,29 @@ describe("joint orchestration", () => {
     expect(result.outcome.recommendation.conditions.join(" ")).toContain("Maintenance Coordinator");
   });
 
+  it.each([
+    "Should we hire more people?",
+    "Can we afford another operations employee?",
+    "Is the company ready to expand the team?",
+    "Which department should receive the next hire?",
+  ])("produces a trusted joint answer for %j", async (question) => {
+    // Regression: offline fixture selection once matched "team" in this question
+    // to the HR capacity fixture, so the coordinator cited facts HR had not
+    // reported and the whole answer was correctly rejected. Every documented
+    // joint question must reach a trusted result.
+    const llm = createMockLlmClient();
+    const result = await answerJointQuestion({
+      llm,
+      financeAgent: createFinanceAgent({ llm, data: financeData }),
+      hrAgent: createHrAgent({ llm, data: hrData }),
+      question,
+    });
+
+    expect(result.finance.trusted).toBe(true);
+    expect(result.hr.trusted).toBe(true);
+    expect(result.outcome.trusted).toBe(true);
+  });
+
   it("derives its constraints from verified facts, not raw data", async () => {
     const constraints = deriveJointConstraints(await analysisFor("finance"), await analysisFor("hr"));
 

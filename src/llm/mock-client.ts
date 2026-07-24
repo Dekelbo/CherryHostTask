@@ -32,9 +32,14 @@ export function createMockLlmClient(fixtures: readonly Fixture[] = FIXTURES): Ll
       );
     }
 
+    // Score by matched term length, not match count: a specific phrase like
+    // "over capacity" should outweigh a generic word like "team", which appears
+    // in questions belonging to a different fixture entirely.
     const scored = candidates.map((fixture) => ({
       fixture,
-      score: fixture.match.filter((term) => question.includes(term)).length,
+      score: fixture.match
+        .filter((term) => question.includes(term))
+        .reduce((total, term) => total + term.length, 0),
     }));
 
     const best = scored.reduce((leader, entry) => (entry.score > leader.score ? entry : leader));
