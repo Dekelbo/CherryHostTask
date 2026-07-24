@@ -119,8 +119,14 @@ export interface FactEntry {
   note?: string;
 }
 
+/**
+ * The coordinator also gets a fact sheet — built from the two agents' verified
+ * facts, never from raw data — so it is held to the same grounding rules.
+ */
+export type FactSheetOwner = AgentId | "coordinator";
+
 export interface FactSheet {
-  agent: AgentId;
+  agent: FactSheetOwner;
   reportingPeriod: string;
   /** Flat `fieldPath -> entry`. The allowlist the verifier checks against. */
   entries: Record<string, FactEntry>;

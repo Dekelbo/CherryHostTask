@@ -14,13 +14,16 @@ export function createMockLlmClient(fixtures: readonly Fixture[] = FIXTURES): Ll
   const stats: LlmCallStats = { calls: 0, inputTokens: 0, outputTokens: 0 };
 
   function selectFixture(input: StructuredRequest<unknown>): Fixture {
-    const haystack = `${input.systemPrompt}\n${input.userPrompt}`.toLowerCase();
+    // Keyword scoring looks at the question only. The system prompt carries the
+    // whole fact sheet, whose field names would otherwise swamp the signal.
+    const question = input.userPrompt.toLowerCase();
+    const role = input.systemPrompt.toLowerCase();
 
     const candidates = fixtures.filter((fixture) => {
       if (fixture.purpose !== input.purpose) return false;
       // The agent marker lives in the department prompt, so a finance request
       // can never be served an HR fixture.
-      return fixture.agent === undefined || haystack.includes(`${fixture.agent} agent`);
+      return fixture.agent === undefined || role.includes(`${fixture.agent} agent`);
     });
 
     if (candidates.length === 0) {
@@ -31,7 +34,7 @@ export function createMockLlmClient(fixtures: readonly Fixture[] = FIXTURES): Ll
 
     const scored = candidates.map((fixture) => ({
       fixture,
-      score: fixture.match.filter((term) => haystack.includes(term)).length,
+      score: fixture.match.filter((term) => question.includes(term)).length,
     }));
 
     const best = scored.reduce((leader, entry) => (entry.score > leader.score ? entry : leader));

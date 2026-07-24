@@ -6,18 +6,18 @@
   "response": {
     "recommendation": "hire_conditionally",
     "headline": "Fill the already-approved maintenance role now; hold the operations role until budget is available.",
-    "summary": "HR shows two departments over capacity with two roles already open, while Finance can fund exactly 1 additional hire from the €52,000 available hiring budget. Hiring the Maintenance Coordinator resolves the role that is both funded and longest open, without exceeding what Finance can support.",
-    "financePerspective": "The available annual hiring budget is €52,000, being €96,000 approved less €44,000 committed. At the €48,000 benchmark loaded cost that funds 1 hire and no more, against a monthly operating profit of €56,000 and 8 months of runway.",
-    "hrPerspective": "Operations and maintenance are over capacity, carrying 180 and 96 overtime hours last month out of 310 across 34 employees. The Maintenance Coordinator role has approved budget and has been open 63 days; the Operations Associate role is still awaiting budget.",
+    "summary": "HR reports two departments over capacity with two roles already open, while Finance can fund exactly 1 additional hire from the €52,000 available hiring budget. Filling the Maintenance Coordinator role resolves the vacancy that is both funded and longest open, without exceeding what Finance can support.",
+    "financePerspective": "The available annual hiring budget is €52,000, being €96,000 approved less €44,000 already committed. At the €48,000 benchmark loaded cost that funds 1 hire and no more, against 8 months of cash runway.",
+    "hrPerspective": "Operations and maintenance are both over capacity, carrying 310 overtime hours last month across 34 employees. The Maintenance Coordinator role already has approved budget and has been open 63 days, while the Operations Associate role is still awaiting budget.",
     "conditions": [
       "Fill only the Maintenance Coordinator role, which already carries approved budget.",
       "Cap the loaded annual cost at the €48,000 benchmark used in the affordability calculation.",
       "Re-assess the Operations Associate role at the next reporting period, once overtime and budget positions are refreshed."
     ],
     "risks": [
-      "Operations carries the largest overtime load at 180 hours but its role is unfunded, so pressure there is not relieved by this decision.",
+      "Operations remains over capacity and its role is unfunded, so pressure there is not relieved by this decision.",
       "Average time to hire is 38 days, so overtime continues well after approval.",
-      "Voluntary turnover of 11.8% is most likely to bite in the two over-capacity departments, which would undo the added capacity."
+      "Adding capacity in maintenance only may shift informal workload onto operations rather than reducing it."
     ],
     "missingInformation": [
       "The €48,000 loaded cost per hire is a benchmark assumption, not an agreed offer, so the true cost of the hire is uncertain.",

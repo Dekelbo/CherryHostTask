@@ -1,6 +1,7 @@
 import type {
   AgentId,
   FactSheet,
+  FactSheetOwner,
   GroundedFact,
   VerificationIssue,
   VerificationResult,
@@ -63,14 +64,16 @@ const DEPARTMENT_FIELD_NAMES: Record<AgentId, readonly string[]> = {
 /** Numbers permitted in prose without a backing fact. Deliberately tiny. */
 const SAFE_BARE_NUMBERS = new Set([0, 1, 2]);
 
-function otherDepartment(agent: AgentId): AgentId {
-  return agent === "finance" ? "hr" : "finance";
-}
+/**
+ * Does this field name belong to the other department's vocabulary?
+ * The coordinator has no "other department" — it legitimately sees facts from
+ * both, so nothing is foreign to it.
+ */
+function isForeignField(owner: FactSheetOwner, fieldPath: string): boolean {
+  if (owner === "coordinator") return false;
 
-/** Does this field name belong to the other department's vocabulary? */
-function isForeignField(agent: AgentId, fieldPath: string): boolean {
   const root = fieldPath.split(".")[0] ?? fieldPath;
-  const foreign = DEPARTMENT_FIELD_NAMES[otherDepartment(agent)];
+  const foreign = DEPARTMENT_FIELD_NAMES[owner === "finance" ? "hr" : "finance"];
   return foreign.some((name) => name === root || name === fieldPath);
 }
 
@@ -243,7 +246,7 @@ function extractNumbers(text: string, reportingPeriod: string): number[] {
 }
 
 export interface VerifyAnalysisInput extends ProseScanInput {
-  agent: AgentId;
+  agent: FactSheetOwner;
   unbackedNumberMode: UnbackedNumberMode;
 }
 

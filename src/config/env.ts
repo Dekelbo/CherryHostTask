@@ -45,8 +45,6 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   return result.data;
 }
 
-/**
- * Validated environment, evaluated once at module load so misconfiguration
- * surfaces at startup rather than deep inside a request.
- */
-export const env: Env = loadEnv();
+// Note: deliberately not evaluated at module load. The CLI calls `loadEnv()`
+// inside its own error handling so a misconfiguration prints a readable message
+// and a config exit code, rather than throwing during an import.
